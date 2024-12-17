@@ -2,8 +2,8 @@
   "name": "agglookup",
   "displayName": "aggtablelookup",
   "description": "look up pendo agg table",
-  "version": "0.0.1",
   "private":"true",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.96.0"
   },

@@ -8,22 +8,36 @@ This extension allows you to look up Pendo aggregation tables by providing keywo
 - Displays the table content in a webview panel.
 - Provides hover information for keywords in any text document.
 
-## Requirements
+Only highlights most common fields.
 
-- Visual Studio Code version 1.96.0 or higher.
-
-## Extension Settings
-
-This extension does not contribute any settings.
+## Available sources
+'visitors'
+'accounts'
+'pages'
+'features'
+'trackTypes' 
+'guides'
+'groups'
+'events'
+'pageEvents' 
+'featureEvents'
+'trackEvents'
+'guideEvents'
+'pollEvents' 
+'guidesSeen' 
+'pollsSeen'
+'singleEvents'
 
 ## Known Issues
 
-No known issues at this time.
+Does not automatically activate. You need to use the command agglookup: show to activate.
+Once activated it will stay activated on all files.
+TODO: fix activation
 
 ## Release Notes
 
-### 0.0.1
+### 0.0.2
 
-- Initial release of agglookup. Still beta
+added fields to some sources
 
 ---
