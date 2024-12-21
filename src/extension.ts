@@ -1,5 +1,3 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import marked from 'marked';
 // Define keywords and their table content
@@ -11,7 +9,7 @@ const keywordTableMap: { [key: string]: vscode.MarkdownString } = {
 'trackTypes': new vscode.MarkdownString(`| **trackTypes** |\n|---------|\n| id |\n| appId |\n| name |\n| createdByUser |\n| createdAt |\n| lastUpdatedByUser |\n| lastUpdatedAt |\n| group |\n| isCoreEvent |\n| rules |\n| eventPropertyNameList |`),
 'guides': new vscode.MarkdownString(`| **guides** |\n|---------|\n| id |\n| appId |\n| name |\n| createdByUser |\n| createdAt |\n| lastUpdatedByUser |\n| lastUpdatedAt |\n| attributes.* |\n| audience |\n| conversion |\n| currentFirstEligibileToBeSeenAt |\n| dependentMetadata |\n| description |\n| emailState |\n| expiresAfter |\n| isModule |\n| isMultiStep |\n| isTopLevel |\n| launchMethod |\n| polls.* |\n| publishedAt |\n| publishedEver |\n| recurrence |\n| recurrenceEligibilityWindow |\n| redisplay |\n| resetAt |\n| showsAfter |\n| state |\n| steps.* |\n| translationStates |\n| validThrough |`),
 'groups': new vscode.MarkdownString(`| **groups** |\n|---------|\n| id |\n| name |\n| createdByUser |\n| createdAt |\n| lastUpdatedByUser |\n| lastUpdatedAt |\n| color |\n| description |\n| length |\n| type |\n| feedbackProductId |\n| feedbackVisibility |`),
-'events': new vscode.MarkdownString(`| **events** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| rageClickCount |\n| errorClickCount |\n| uTurnCount |\n| deadClickCount |\n| properties |`),
+'events': new vscode.MarkdownString(`| **events** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| firstTime |\n| lastTime |\n| pageId |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| rageClickCount |\n| errorClickCount |\n| uTurnCount |\n| deadClickCount |\n| country |\n| region |\n| recordingId |\n| recordingSessionId |\n| tabId |\n| lastKeyFrameTimestamp |\n| properties |`),
 'pageEvents': new vscode.MarkdownString(`| **pageEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| pageId |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| rageClickCount |\n| errorClickCount |\n| uTurnCount |\n| deadClickCount  |\n| properties |`),
 'featureEvents': new vscode.MarkdownString(`| **featureEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| featureId |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| rageClickCount |\n| errorClickCount |\n| uTurnCount |\n| deadClickCount |\n| properties |`),
 'trackEvents': new vscode.MarkdownString(`| **trackEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| trackTypeId |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| properties |`),
@@ -19,21 +17,19 @@ const keywordTableMap: { [key: string]: vscode.MarkdownString } = {
 'pollEvents': new vscode.MarkdownString(`| **pollEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| browserTime |\n| type |\n| guideId |\n| guideStepId |\n| pollId |\n| pollType |\n| pollResponse |\n| language |\n| remoteIp |\n| serverName |\n| country |\n| region |\n| latitude |\n| longitude |\n| tabId |\n| url |\n| userAgent |\n| properties |`),
 'guidesSeen': new vscode.MarkdownString(`| **guidesSeen** |\n|---------|\n| visitorld |\n| guideId |\n| guideStepId |\n| firstSeenAt |\n| lastAdvancedAutoAt |\n| lastDismissedAutoAt |\n| lastSeenAt |\n| lastTimeoutAt |\n| seenCount |\n| lastState |`),
 'pollsSeen': new vscode.MarkdownString(`| **pollsSeen** |\n|---------|\n| visitorld |\n| guideId |\n| pollId |\n| time |\n| pollResponse |`),
-'singleEvents': new vscode.MarkdownString(`| **singleEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| properties |`)
+'singleEvents': new vscode.MarkdownString(`| **singleEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| properties |`),
 };
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
+export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand('agglookup.show', async (keyword: string) => {
 		if (!keyword) {
-			keyword = (await vscode.window.showInputBox({
-				prompt: 'Enter a keyword to look up',
-				placeHolder: 'e.g., visitors, accounts, pages'
-			})) || '';
+			const suggestions: vscode.QuickPickItem[] = Object.keys(keywordTableMap).map(key => ({ label: key }));
+			const selected = await vscode.window.showQuickPick(suggestions, {
+				placeHolder: 'Select a keyword to look up',
+			});
+			keyword = selected ? selected.label : '';
 		}
 
 		if (keyword && keywordTableMap[keyword]) {

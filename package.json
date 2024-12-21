@@ -3,7 +3,7 @@
   "displayName": "aggtablelookup",
   "description": "look up pendo agg table",
   "private":"true",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.96.0"
   },
