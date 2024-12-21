@@ -2,6 +2,8 @@
 
 This extension allows you to look up Pendo aggregation tables by providing keywords.
 
+Build extension using vsce package and install vsix
+
 ## Features
 
 - Look up Pendo aggregation tables by entering keywords such as `visitors`, `accounts`, `pages`, etc.
@@ -36,7 +38,7 @@ TODO: fix activation
 
 ## Release Notes
 
-### 0.0.2
+### 0.0.5
 
 added fields to some sources
 
