@@ -12,6 +12,8 @@ Build extension using vsce package and install vsix
 
 Only highlights most common fields.
 
+![](./img/CleanShotFLi32uvu.gif)
+
 ## Available sources
 'visitors'
 'accounts'
