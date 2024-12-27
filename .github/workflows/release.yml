@@ -28,7 +28,7 @@ jobs:
         run: npm install -g vsce
 
       - name: Package extension
-        run: vsce package
+        run: vsce package --out agglookup.vsix
 
       - name: Create Release
         id: create_release
@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "*.vsix"
+          asset_path: "agglookup.vsix"
           asset_name: "agglookup.vsix"
           asset_content_type: application/octet-stream
 
