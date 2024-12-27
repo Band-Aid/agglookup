@@ -18,9 +18,8 @@ const keywordTableMap: { [key: string]: vscode.MarkdownString } = {
 'guidesSeen': new vscode.MarkdownString(`| **guidesSeen** |\n|---------|\n| visitorld |\n| guideId |\n| guideStepId |\n| firstSeenAt |\n| lastAdvancedAutoAt |\n| lastDismissedAutoAt |\n| lastSeenAt |\n| lastTimeoutAt |\n| seenCount |\n| lastState |`),
 'pollsSeen': new vscode.MarkdownString(`| **pollsSeen** |\n|---------|\n| visitorld |\n| guideId |\n| pollId |\n| time |\n| pollResponse |`),
 'singleEvents': new vscode.MarkdownString(`| **singleEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| properties |`),
+'emailEvents': new vscode.MarkdownString(`| **emailEvents** |\n|---------|\n| WIP |`)
 };
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 
 export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand('agglookup.show', async (keyword: string) => {

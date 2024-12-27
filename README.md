@@ -31,7 +31,7 @@ Only highlights most common fields.
 'guidesSeen' 
 'pollsSeen'
 'singleEvents'
-
+'emailEvents'
 ## Known Issues
 
 Does not automatically activate. You need to use the command agglookup: show to activate.
@@ -40,7 +40,7 @@ TODO: fix activation
 
 ## Release Notes
 
-### 0.0.5
+### 0.1.1
 
 added fields to some sources
 
