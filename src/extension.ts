@@ -48,22 +48,24 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable);
 
-    // Register the HoverProvider
-    const hoverProvider = vscode.languages.registerHoverProvider(
-        { scheme: '*', language: '*' },
-        {
-            provideHover(document, position, token) {
-                const range = document.getWordRangeAtPosition(position);
-                const word = document.getText(range);
-				console.log('word:', word);
-                if (keywordTableMap[word]) {
-                    return new vscode.Hover(keywordTableMap[word]);
-                }
-            }
-        }
-    );
-
-    context.subscriptions.push(hoverProvider);
+	const config = vscode.workspace.getConfiguration('agglookup');
+	const enableHoverProvider = config.get<boolean>('hoverProvider', false);
+	if (enableHoverProvider) {
+		const hoverProvider = vscode.languages.registerHoverProvider(
+			{ scheme: '*', language: '*' },
+			{
+				provideHover(document, position, token) {
+					const range = document.getWordRangeAtPosition(position);
+					const word = document.getText(range);
+					console.log('word:', word);
+					if (keywordTableMap[word]) {
+						return new vscode.Hover(keywordTableMap[word]);
+					}
+				}
+			}
+		);
+		context.subscriptions.push(hoverProvider);
+	}
 }
 
 function getWebviewContent(markdown: string): string {
