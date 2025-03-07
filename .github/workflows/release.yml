@@ -1,7 +1,6 @@
 name: Package and Release VS Code Extension
 
 on:
-  # Trigger on push to tags that follow a version pattern, e.g. v1.0.0
   push:
     tags:
       - 'v*.*.*'
@@ -10,7 +9,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -28,8 +26,6 @@ jobs:
 
       - name: Package Extension
         run: vsce package
-        # If your packaging needs an authentication token for publishing,
-        # you can set NODE_AUTH_TOKEN if required.
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
