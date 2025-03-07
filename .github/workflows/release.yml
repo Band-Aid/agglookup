@@ -1,69 +1,55 @@
-name: Release Extension
+name: Package and Release VS Code Extension
 
 on:
+  # Trigger on push to tags that follow a version pattern, e.g. v1.0.0
   push:
     tags:
-      - '*.*.*'
-  workflow_dispatch: {}
+      - 'v*.*.*'
+  workflow_dispatch:
 
 jobs:
-  build-and-release:
+  release:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out repo
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Node
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '14'
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Compile
-        run: npm run compile
-
-      - name: Install vsce
+      - name: Install VSCE
         run: npm install -g vsce
 
-      - name: Package extension
-        run: vsce package --out agglookup.vsix
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Create Release
+      - name: Package Extension
+        run: vsce package
+        # If your packaging needs an authentication token for publishing,
+        # you can set NODE_AUTH_TOKEN if required.
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
-        with:
-          tag_name: ${{ github.ref_name }}
-          release_name: ${{ github.ref_name }}
-          draft: false
-          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
 
-      - name: Upload VSIX to Release
+      - name: Upload VSIX Asset
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "agglookup.vsix"
-          asset_name: "agglookup.vsix"
+          asset_path: '*.vsix'
+          asset_name: my-extension.vsix
           asset_content_type: application/octet-stream
-
-  create-version-tag:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-
-      - name: Extract version
-        id: extract_version
-        run: |
-          echo "VERSION=$(node -p 'require(\"./package.json\").version')" >> $GITHUB_ENV
-
-      - name: Create and push tag
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git tag v${{ env.VERSION }}
-          git push origin v${{ env.VERSION }}
