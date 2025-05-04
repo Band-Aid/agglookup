@@ -1,27 +1,22 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 import marked from 'marked';
-// Define keywords and their table content
-const keywordTableMap: { [key: string]: vscode.MarkdownString } = {
-'visitors': new vscode.MarkdownString(`| **visitors** |\n|---------|\n| visitorld |\n| metadata |\n| metadata.auto.accountid |\n| metadata.auto.accountids |\n| metadata.auto.firstvisit |\n| metadata.auto.lastvisit |\n| metadata.auto.lastbrowsername |\n| metadata.auto.lastbrowserversion |\n| metadata.auto.lastoperatingsystem |\n| metadata.auto.lastservername |\n| metadata.auto.lastupdated |\n| metadata.auto.lastuseragent |\n| metadata.auto_*.* |\n| metadata.agent.* |\n| metadata.custom.* |\n| metadata.salesforce.* |\n| metadata.hubspot.* |\n| metadata.segmentio.* |`),
-'accounts': new vscode.MarkdownString(`| **accounts** |\n|---------|\n| accountId |\n| metadata |\n| metadata.auto.firstvisit |\n| metadata.auto.lastvisit |\n| metadata.auto.lastupdated |\n| metadata.auto_*.* |\n| metadata.agent.* |\n| metadata.custom.* |\n| metadata.salesforce.* |\n| metadata.hubspot.* |\n| metadata.segmentio.* |`),
-'pages': new vscode.MarkdownString(`| **pages** |\n|---------|\n| id |\n| appId |\n| name |\n| createdByUser |\n| createdAt |\n| lastUpdatedByUser |\n| lastUpdatedAt |\n| group |\n| isCoreEvent |\n| rules |\n| excludeRules |\n| isSuggested |\n| suggestedTagRules |`),
-'features': new vscode.MarkdownString(`| **features** |\n|---------|\n| id |\n| appId |\n| name |\n| createdByUser |\n| createdAt |\n| lastUpdatedByUser |\n| lastUpdatedAt |\n| group |\n| isCoreEvent |\n| pageId |\n| appWide |\n| eventPropertyConfigurations |\n| elementPathRules |\n| isSuggested |\n| suggestedMatch |`),
-'trackTypes': new vscode.MarkdownString(`| **trackTypes** |\n|---------|\n| id |\n| appId |\n| name |\n| createdByUser |\n| createdAt |\n| lastUpdatedByUser |\n| lastUpdatedAt |\n| group |\n| isCoreEvent |\n| rules |\n| eventPropertyNameList |`),
-'guides': new vscode.MarkdownString(`| **guides** |\n|---------|\n| id |\n| appId |\n| name |\n| createdByUser |\n| createdAt |\n| lastUpdatedByUser |\n| lastUpdatedAt |\n| attributes.* |\n| audience |\n| conversion |\n| currentFirstEligibileToBeSeenAt |\n| dependentMetadata |\n| description |\n| emailState |\n| expiresAfter |\n| isModule |\n| isMultiStep |\n| isTopLevel |\n| launchMethod |\n| polls.* |\n| publishedAt |\n| publishedEver |\n| recurrence |\n| recurrenceEligibilityWindow |\n| redisplay |\n| resetAt |\n| showsAfter |\n| state |\n| steps.* |\n| translationStates |\n| validThrough |`),
-'groups': new vscode.MarkdownString(`| **groups** |\n|---------|\n| id |\n| name |\n| createdByUser |\n| createdAt |\n| lastUpdatedByUser |\n| lastUpdatedAt |\n| color |\n| description |\n| length |\n| type |\n| feedbackProductId |\n| feedbackVisibility |`),
-'events': new vscode.MarkdownString(`| **events** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| firstTime |\n| lastTime |\n| pageId |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| rageClickCount |\n| errorClickCount |\n| uTurnCount |\n| deadClickCount |\n| country |\n| region |\n| recordingId |\n| recordingSessionId |\n| tabId |\n| lastKeyFrameTimestamp |\n| properties |`),
-'pageEvents': new vscode.MarkdownString(`| **pageEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| pageId |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| rageClickCount |\n| errorClickCount |\n| uTurnCount |\n| deadClickCount  |\n| properties |`),
-'featureEvents': new vscode.MarkdownString(`| **featureEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| featureId |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| rageClickCount |\n| errorClickCount |\n| uTurnCount |\n| deadClickCount |\n| properties |`),
-'trackEvents': new vscode.MarkdownString(`| **trackEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| trackTypeId |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| properties |`),
-'guideEvents': new vscode.MarkdownString(`| **guideEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| browserTime |\n| type |\n| guideId |\n| guideSeenReason |\n| guideStepId |\n| destinationStepId |\n| guideStepPollTypes |\n| language |\n| remoteIp |\n| serverName |\n| country |\n| region |\n| latitude |\n| longitude |\n| tabId |\n| url |\n| userAgent |\n| properties |\n| uiElementid |\n| uiElementType |\n| uiElementText |\n| uiElementActions |`),
-'pollEvents': new vscode.MarkdownString(`| **pollEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| browserTime |\n| type |\n| guideId |\n| guideStepId |\n| pollId |\n| pollType |\n| pollResponse |\n| language |\n| remoteIp |\n| serverName |\n| country |\n| region |\n| latitude |\n| longitude |\n| tabId |\n| url |\n| userAgent |\n| properties |`),
-'guidesSeen': new vscode.MarkdownString(`| **guidesSeen** |\n|---------|\n| visitorld |\n| guideId |\n| guideStepId |\n| firstSeenAt |\n| lastAdvancedAutoAt |\n| lastDismissedAutoAt |\n| lastSeenAt |\n| lastTimeoutAt |\n| seenCount |\n| lastState |`),
-'pollsSeen': new vscode.MarkdownString(`| **pollsSeen** |\n|---------|\n| visitorld |\n| guideId |\n| pollId |\n| time |\n| pollResponse |`),
-'singleEvents': new vscode.MarkdownString(`| **singleEvents** |\n|---------|\n| visitorld |\n| accountId |\n| appId |\n| hour |\n| day |\n| week |\n| month |\n| quarter |\n| numEvents |\n| numMinutes |\n| remoteIp |\n| server |\n| userAgent |\n| tabId |\n| properties |`),
-'emailEvents': new vscode.MarkdownString(`| **emailEvents** |\n|---------|\n| WIP |`)
-};
+
+const keywordTableMap: { [key: string]: vscode.MarkdownString } = {}; // Clear existing manual entries
 
 export function activate(context: vscode.ExtensionContext) {
+	// Dynamically load all .md files from 'src/definitions'
+	const definitionsPath = path.join(context.extensionPath, 'src', 'definitions');
+	if (fs.existsSync(definitionsPath)) {
+		const files = fs.readdirSync(definitionsPath).filter(file => file.endsWith('.md'));
+		files.forEach(file => {
+			const key = path.basename(file, '.md'); // e.g., 'visitors' from 'visitors.md'
+			const content = fs.readFileSync(path.join(definitionsPath, file), 'utf8');
+			keywordTableMap[key] = new vscode.MarkdownString(content);
+		});
+	}
+
 	const disposable = vscode.commands.registerCommand('agglookup.show', async (keyword: string) => {
 		if (!keyword) {
 			const suggestions: vscode.QuickPickItem[] = Object.keys(keywordTableMap).map(key => ({ label: key }));
