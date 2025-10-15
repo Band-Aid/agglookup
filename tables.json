@@ -88,7 +88,7 @@
     "attributes.*",
     "audience",
     "conversion",
-    "currentFirstEligibileToBeSeenAt",
+    "currentFirstEligibleToBeSeenAt",
     "dependentMetadata",
     "description",
     "emailState",
