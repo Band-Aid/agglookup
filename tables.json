@@ -150,7 +150,6 @@
     "region",
     "recordingId",
     "recordingSessionId",
-    "tabId",
     "lastKeyFrameTimestamp",
     "properties"
   ],
