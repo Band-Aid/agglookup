@@ -84,8 +84,8 @@ suite('Hover Provider Test Suite', () => {
 		assert.ok(hoverContent, 'Hover should have content');
 		assert.ok(hoverContent.value.includes('**visitors**'), 
 			'Hover should contain the table name "visitors"');
-		assert.ok(hoverContent.value.includes('visitorld'), 
-			'Hover should contain field "visitorld" from the visitors table');
+		assert.ok(hoverContent.value.includes('visitorId'), 
+			'Hover should contain field "visitorId" from the visitors table');
 		
 		// Close the editor
 		await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
