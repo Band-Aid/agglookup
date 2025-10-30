@@ -4,6 +4,10 @@ import * as vscode from 'vscode';
 // Extension ID - update this if you set a publisher in package.json
 const EXTENSION_ID = 'undefined_publisher.agglookup';
 
+// Test timing constants
+const CONFIG_PROPAGATION_DELAY_MS = 1000;
+const EXTENSION_INIT_DELAY_MS = 1000;
+
 /**
  * Hover Provider Test Suite
  * 
@@ -28,7 +32,7 @@ suite('Hover Provider Test Suite', () => {
 		
 		// Wait for configuration to propagate
 		// Note: Fixed delay is used here as configuration changes are async
-		await new Promise(resolve => setTimeout(resolve, 1000));
+		await new Promise(resolve => setTimeout(resolve, CONFIG_PROPAGATION_DELAY_MS));
 		
 		// Now activate the extension
 		const extension = vscode.extensions.getExtension(EXTENSION_ID);
@@ -38,7 +42,7 @@ suite('Hover Provider Test Suite', () => {
 		
 		// Wait for extension to fully initialize
 		// Note: This delay ensures all providers are registered
-		await new Promise(resolve => setTimeout(resolve, 1000));
+		await new Promise(resolve => setTimeout(resolve, EXTENSION_INIT_DELAY_MS));
 	});
 
 	suiteTeardown(async function() {

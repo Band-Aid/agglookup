@@ -4,6 +4,10 @@ import * as vscode from 'vscode';
 // Extension ID - update this if you set a publisher in package.json
 const EXTENSION_ID = 'undefined_publisher.agglookup';
 
+// Test timing constants
+const WEBVIEW_CREATION_DELAY_MS = 500;
+const COMMAND_EXECUTION_DELAY_MS = 500;
+
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
@@ -83,7 +87,7 @@ suite('Extension Test Suite', () => {
 		await vscode.commands.executeCommand('agglookup.show', 'visitors');
 		
 		// Wait a bit for the webview to be created
-		await new Promise(resolve => setTimeout(resolve, 500));
+		await new Promise(resolve => setTimeout(resolve, WEBVIEW_CREATION_DELAY_MS));
 		
 		// Clean up - close any open editors/webviews
 		await vscode.commands.executeCommand('workbench.action.closeAllEditors');
@@ -103,7 +107,7 @@ suite('Extension Test Suite', () => {
 		await vscode.commands.executeCommand('agglookup.show', 'unknownTableName');
 		
 		// Wait a bit
-		await new Promise(resolve => setTimeout(resolve, 500));
+		await new Promise(resolve => setTimeout(resolve, COMMAND_EXECUTION_DELAY_MS));
 		
 		// Clean up
 		await vscode.commands.executeCommand('workbench.action.closeAllEditors');
