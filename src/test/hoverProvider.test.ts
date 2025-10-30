@@ -227,7 +227,7 @@ suite('Hover Provider Test Suite', () => {
 			// Our extension uses a specific markdown table format with |---------|\n
 			// and bold table names. Check both patterns to be more robust.
 			const hasTableSeparator = hoverContent.value.includes('|---------|\n');
-			const hasBoldTableName = hoverContent.value.match(/\*\*[a-zA-Z]+\*\*/);
+			const hasBoldTableName = hoverContent.value.match(/\*\*[a-zA-Z]+\*\*/) !== null;
 			const isOurHover = hasTableSeparator && hasBoldTableName;
 			assert.ok(!isOurHover, 'Our extension should not provide hover for unknown keywords');
 		}
