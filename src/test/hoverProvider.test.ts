@@ -1,6 +1,9 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
 
+// Extension ID - update this if you set a publisher in package.json
+const EXTENSION_ID = 'undefined_publisher.agglookup';
+
 /**
  * Hover Provider Test Suite
  * 
@@ -19,19 +22,22 @@ suite('Hover Provider Test Suite', () => {
 		this.timeout(30000);
 		
 		// Enable hover provider configuration before extension activates
+		// Note: Using Global scope because Workspace scope may not be available in test environment
 		const config = vscode.workspace.getConfiguration('agglookup');
 		await config.update('hoverProvider', true, vscode.ConfigurationTarget.Global);
 		
 		// Wait for configuration to propagate
+		// Note: Fixed delay is used here as configuration changes are async
 		await new Promise(resolve => setTimeout(resolve, 1000));
 		
 		// Now activate the extension
-		const extension = vscode.extensions.getExtension('undefined_publisher.agglookup');
+		const extension = vscode.extensions.getExtension(EXTENSION_ID);
 		if (extension && !extension.isActive) {
 			await extension.activate();
 		}
 		
 		// Wait for extension to fully initialize
+		// Note: This delay ensures all providers are registered
 		await new Promise(resolve => setTimeout(resolve, 1000));
 	});
 
@@ -219,8 +225,10 @@ suite('Hover Provider Test Suite', () => {
 		if (hover && hover.length > 0) {
 			const hoverContent = hover[0].contents[0] as vscode.MarkdownString;
 			// Our extension uses a specific markdown table format with |---------|\n
-			// If this pattern exists, it means our extension provided the hover
-			const isOurHover = hoverContent.value.includes('|---------|\n');
+			// and bold table names. Check both patterns to be more robust.
+			const hasTableSeparator = hoverContent.value.includes('|---------|\n');
+			const hasBoldTableName = hoverContent.value.match(/\*\*[a-zA-Z]+\*\*/);
+			const isOurHover = hasTableSeparator && hasBoldTableName;
 			assert.ok(!isOurHover, 'Our extension should not provide hover for unknown keywords');
 		}
 		

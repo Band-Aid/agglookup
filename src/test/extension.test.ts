@@ -1,17 +1,20 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
 
+// Extension ID - update this if you set a publisher in package.json
+const EXTENSION_ID = 'undefined_publisher.agglookup';
+
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
 	test('Extension should be present', () => {
-		const extension = vscode.extensions.getExtension('undefined_publisher.agglookup');
+		const extension = vscode.extensions.getExtension(EXTENSION_ID);
 		assert.ok(extension, 'Extension should be installed');
 	});
 
 	test('Extension should activate', async function() {
 		this.timeout(10000);
-		const extension = vscode.extensions.getExtension('undefined_publisher.agglookup');
+		const extension = vscode.extensions.getExtension(EXTENSION_ID);
 		assert.ok(extension, 'Extension should be installed');
 		
 		if (!extension.isActive) {
@@ -25,7 +28,7 @@ suite('Extension Test Suite', () => {
 		this.timeout(10000);
 		
 		// Ensure extension is activated
-		const extension = vscode.extensions.getExtension('undefined_publisher.agglookup');
+		const extension = vscode.extensions.getExtension(EXTENSION_ID);
 		if (extension && !extension.isActive) {
 			await extension.activate();
 		}
@@ -45,7 +48,7 @@ suite('Extension Test Suite', () => {
 		this.timeout(10000);
 		
 		// Ensure extension is activated
-		const extension = vscode.extensions.getExtension('undefined_publisher.agglookup');
+		const extension = vscode.extensions.getExtension(EXTENSION_ID);
 		if (extension && !extension.isActive) {
 			await extension.activate();
 		}
@@ -71,7 +74,7 @@ suite('Extension Test Suite', () => {
 		this.timeout(10000);
 		
 		// Ensure extension is activated
-		const extension = vscode.extensions.getExtension('undefined_publisher.agglookup');
+		const extension = vscode.extensions.getExtension(EXTENSION_ID);
 		if (extension && !extension.isActive) {
 			await extension.activate();
 		}
@@ -90,7 +93,7 @@ suite('Extension Test Suite', () => {
 		this.timeout(10000);
 		
 		// Ensure extension is activated
-		const extension = vscode.extensions.getExtension('undefined_publisher.agglookup');
+		const extension = vscode.extensions.getExtension(EXTENSION_ID);
 		if (extension && !extension.isActive) {
 			await extension.activate();
 		}

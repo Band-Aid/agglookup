@@ -111,7 +111,13 @@ This error occurs when:
 1. The extension ID in tests doesn't match the actual extension ID
 2. The extension hasn't been installed in the test environment
 
-**Solution:** The tests use `'undefined_publisher.agglookup'` as the extension ID. This is the default ID when no publisher is specified in `package.json`. If you've set a publisher, update the extension ID in the tests.
+**Solution:** The tests use `'undefined_publisher.agglookup'` as the extension ID. This is the default ID when no publisher is specified in `package.json`. If you've set a publisher, update the `EXTENSION_ID` constant in these files:
+- `src/test/extension.test.ts` (line 4)
+- `src/test/hoverProvider.test.ts` (line 4)
+
+The extension ID format is `{publisher}.{name}` where:
+- `{publisher}` is the "publisher" field in package.json (or "undefined_publisher" if not set)
+- `{name}` is the "name" field in package.json
 
 ### Hover provider tests fail
 
